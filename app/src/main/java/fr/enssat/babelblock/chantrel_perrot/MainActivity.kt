@@ -1,4 +1,4 @@
-package fr.enssat.babelblock.chantrel
+package fr.enssat.babelblock.chantrel_perrot
 
 import android.os.Bundle
 import com.google.android.material.floatingactionbutton.FloatingActionButton

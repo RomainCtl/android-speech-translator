@@ -1,4 +1,4 @@
-package fr.enssat.babelblock.chantrel
+package fr.enssat.babelblock.chantrel_perrot
 
 import org.junit.Test
 

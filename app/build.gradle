@@ -7,7 +7,7 @@ android {
     buildToolsVersion "30.0.2"
 
     defaultConfig {
-        applicationId "fr.enssat.babelblock.chantrel"
+        applicationId "fr.enssat.babelblock.chantrel_perrot"
         minSdkVersion 16
         targetSdkVersion 30
         versionCode 1
