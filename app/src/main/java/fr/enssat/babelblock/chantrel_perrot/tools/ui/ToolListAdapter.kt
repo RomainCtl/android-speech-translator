@@ -37,7 +37,7 @@ class ToolListAdapter(val toolChain: ToolChain) : RecyclerView.Adapter<ToolListA
 
     private fun getTool(language: Language) =
         object : ToolDisplay {
-            override var title  = "$language"
+            override var title  = "Translate to:\n$language"
             override var output = ""
             override var input  = ""
             override val tool   = object : Tool {

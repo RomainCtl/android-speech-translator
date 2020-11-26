@@ -1,8 +1,5 @@
 package fr.enssat.babelblock.chantrel_perrot.tools.ui
 
-import android.util.Log
-import org.intellij.lang.annotations.Language
-
 
 interface Tool {
     fun run(input: String, callback: (String) -> Unit)

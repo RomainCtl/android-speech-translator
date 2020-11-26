@@ -18,17 +18,31 @@
         app:layout_constraintBottom_toTopOf="@+id/text_box"
         tools:text="input text" />
 
-    <TextView
+    <LinearLayout
         android:id="@+id/text_box"
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:background="#EEE"
+        android:orientation="vertical"
         android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="Tool Title" />
+        app:layout_constraintTop_toTopOf="parent">
+        <TextView
+            android:text="@string/push_to_talk"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#EEE"
+            android:layout_marginBottom="20dp"
+            android:gravity="center"/>
+
+        <ImageButton
+            android:id="@+id/push_to_talk"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@android:drawable/ic_btn_speak_now" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/text_output"
