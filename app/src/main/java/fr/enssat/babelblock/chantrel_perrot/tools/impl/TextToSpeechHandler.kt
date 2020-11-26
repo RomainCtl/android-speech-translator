@@ -4,7 +4,7 @@ import android.content.Context
 import android.speech.tts.TextToSpeech
 import android.util.Log
 import fr.enssat.babelblock.chantrel_perrot.tools.TextToSpeechTool
-import java.util.Locale
+import java.util.*
 
 class TextToSpeechHandler(context: Context, val locale: Locale): TextToSpeechTool {
 
