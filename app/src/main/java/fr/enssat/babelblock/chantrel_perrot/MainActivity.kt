@@ -1,38 +1,30 @@
 package fr.enssat.babelblock.chantrel_perrot
 
 import android.os.Bundle
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
-import android.view.Menu
-import android.view.MenuItem
+import fr.enssat.babelblock.chantrel_perrot.tools.ui.*
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_main)
-        setSupportActionBar(findViewById(R.id.toolbar))
 
-//        findViewById<FloatingActionButton>(R.id.fab).setOnClickListener { view ->
-//            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                    .setAction("Action", null).show()
-//        }
-    }
+        //create toolchain and its adapter
+        val toolChain = ToolChain()
+        val adpater = ToolChainAdapter(toolChain)
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.menu_main, menu)
-        return true
-    }
+        //dedicated drag and drop mover helper
+        val moveHelper = ToolChainMoveHelper.create(adpater)
+        moveHelper.attachToRecyclerView(tool_chain_list)
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        return when (item.itemId) {
-            R.id.add_tools -> true
-            else -> super.onOptionsItemSelected(item)
-        }
+        //see tool_chain_list in activity_tool_chain.xml
+        //chain of tools
+        tool_chain_list.adapter = adpater
+
+        //see tool_list in activity_tool_chain.xml
+        tool_list.adapter = ToolListAdapter(toolChain)
     }
 }
