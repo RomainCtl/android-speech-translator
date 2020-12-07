@@ -11,6 +11,10 @@ class Language(val code: String) : Comparable<Language> {
     private val displayName: String
         get() = Locale(code).displayName
 
+    fun toLocale(): Locale {
+        return Locale(this.code)
+    }
+
     override fun equals(other: Any?): Boolean {
         if (other === this) {
             return true
