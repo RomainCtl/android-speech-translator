@@ -24,6 +24,7 @@ interface SpeechToTextTool {
     fun start(listener: Listener)
     fun stop()
     fun close()
+    fun setLocale(locale: Locale)
 }
 
 class BlockService(val context: Context) {
