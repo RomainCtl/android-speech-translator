@@ -8,17 +8,6 @@
     android:layout_margin="30dp">
 
     <TextView
-        android:id="@+id/text_input"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_margin="30dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/text_box"
-        tools:text="input text" />
-
-    <TextView
         android:id="@+id/text_box"
         android:layout_width="match_parent"
         android:layout_height="150dp"
