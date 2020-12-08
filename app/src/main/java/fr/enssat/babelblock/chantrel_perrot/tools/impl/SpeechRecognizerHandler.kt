@@ -11,7 +11,7 @@ import fr.enssat.babelblock.chantrel_perrot.tools.SpeechToTextTool
 import java.lang.IllegalStateException
 import java.util.*
 
-class SpeechRecognizerHandler(context: Context, locale: Locale): SpeechToTextTool {
+class SpeechRecognizerHandler(context: Context, private var locale: Locale): SpeechToTextTool {
 
     init {
         if (SpeechRecognizer.isRecognitionAvailable(context).not()) {
@@ -68,6 +68,11 @@ class SpeechRecognizerHandler(context: Context, locale: Locale): SpeechToTextToo
 
     override fun close() {
         speechRecognizer.destroy()
+    }
+
+    override fun setLocale(locale: Locale) {
+        this.locale = locale
+        this.intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.FRENCH)
     }
 
     private fun Bundle.getResult(): String? =

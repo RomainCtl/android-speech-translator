@@ -10,4 +10,6 @@
     <string name="add_tools">Add tools</string>
     <string name="push_to_talk">Push to talk</string>
     <string name="listen_to">Listen to</string>
+    <string name="speaker_logo">Speaker logo</string>
+    <string name="micro_logo">micro logo</string>
 </resources>

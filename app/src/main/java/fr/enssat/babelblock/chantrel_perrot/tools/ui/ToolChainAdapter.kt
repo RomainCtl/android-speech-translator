@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.list_item_tool_chain.view.*
 import fr.enssat.babelblock.chantrel_perrot.R
 
-class ToolChainAdapter(val toolChain: ToolChain) : RecyclerView.Adapter<ToolChainAdapter.ToolViewHolder>(), ItemMoveAdapter {
+class ToolChainAdapter(private val toolChain: ToolChain) : RecyclerView.Adapter<ToolChainAdapter.ToolViewHolder>(), ItemMoveAdapter {
 
     init {
         //notifyDataSetChanged() = redraw, the data set has changed
@@ -43,7 +43,6 @@ class ToolChainAdapter(val toolChain: ToolChain) : RecyclerView.Adapter<ToolChai
     class ToolViewHolder(view: View): RecyclerView.ViewHolder(view) {
         fun bind(toolChain: ToolChain, i: Int) {
             val tool = toolChain.get(i)
-            itemView.text_input.text = tool.input
             itemView.text_output.text = tool.output
             itemView.text_box.text = tool.title
             itemView.text_box.setOnClickListener {

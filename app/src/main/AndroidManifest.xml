@@ -28,24 +28,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity
-            android:name=".SpeechToTextActivity"
-            android:screenOrientation="userPortrait"
-            android:label="@string/stt">
-        </activity>
-
-        <activity
-            android:name=".TranslatorActivity"
-            android:screenOrientation="userPortrait"
-            android:label="@string/trs">
-        </activity>
-
-        <activity
-            android:name=".TextToSpeechActivity"
-            android:screenOrientation="userPortrait"
-            android:label="@string/tts">
-        </activity>
     </application>
 
 </manifest>

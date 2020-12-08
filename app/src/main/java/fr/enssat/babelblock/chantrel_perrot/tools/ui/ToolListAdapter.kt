@@ -10,9 +10,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.mlkit.nl.translate.TranslateLanguage
 import fr.enssat.babelblock.chantrel_perrot.R
 import fr.enssat.babelblock.chantrel_perrot.tools.Language
+import fr.enssat.babelblock.chantrel_perrot.tools.TranslationTool
 import kotlinx.android.synthetic.main.list_item_tool.view.*
+import java.util.*
 
-class ToolListAdapter(val toolChain: ToolChain) : RecyclerView.Adapter<ToolListAdapter.ToolViewHolder>() {
+class ToolListAdapter(val toolChain: ToolChain, val translator: TranslationTool) : RecyclerView.Adapter<ToolListAdapter.ToolViewHolder>() {
 
     var availableLanguages: List<Language> = TranslateLanguage.getAllLanguages()
         .map {
@@ -37,13 +39,19 @@ class ToolListAdapter(val toolChain: ToolChain) : RecyclerView.Adapter<ToolListA
 
     private fun getTool(language: Language) =
         object : ToolDisplay {
+            override var language = language
             override var title  = "Translate to:\n$language"
             override var output = ""
-            override var input  = ""
             override val tool   = object : Tool {
                 //override run method of Tool interface
-                override fun run(input: String, output: (String) -> Unit) {
-                    handler.postDelayed({output("$input $language")},1000)
+                override fun run(input: String, from: Locale, output: (String) -> Unit) {
+                    handler.postDelayed(
+                        {
+                            output("translation in progress...")
+                            translator.translate(input, from, language.toLocale()) { text ->
+                                output("$text")
+                            }
+                        },1000)
                 }
                 override fun close() {
                     Log.d(title, "close")

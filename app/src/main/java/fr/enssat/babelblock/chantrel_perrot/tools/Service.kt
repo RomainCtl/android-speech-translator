@@ -7,7 +7,7 @@ import fr.enssat.babelblock.chantrel_perrot.tools.impl.TranslatorHandler
 import java.util.Locale
 
 interface TextToSpeechTool {
-    fun speak(text: String)
+    fun speak(text: String, locale: Locale)
     fun stop()
     fun close()
 }
@@ -24,12 +24,12 @@ interface SpeechToTextTool {
     fun start(listener: Listener)
     fun stop()
     fun close()
+    fun setLocale(locale: Locale)
 }
 
 class BlockService(val context: Context) {
     fun textToSpeech():TextToSpeechTool {
-        val locale = Locale.getDefault()
-        return TextToSpeechHandler(context.applicationContext, locale)
+        return TextToSpeechHandler(context.applicationContext)
     }
 
     fun translator(): TranslationTool =

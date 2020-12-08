@@ -7,16 +7,16 @@
     android:layout_height="match_parent"
     android:layout_margin="30dp">
 
-    <TextView
-        android:id="@+id/text_input"
-        android:layout_width="match_parent"
+    <Spinner
+        android:id="@+id/selected_language"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:layout_margin="30dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/text_box"
-        tools:text="input text" />
+        tools:listitem="@layout/support_simple_spinner_dropdown_item"/>
 
     <LinearLayout
         android:id="@+id/text_box"
@@ -41,11 +41,12 @@
             android:id="@+id/push_to_talk"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:contentDescription="@string/micro_logo"
             app:srcCompat="@android:drawable/ic_btn_speak_now" />
     </LinearLayout>
 
     <TextView
-        android:id="@+id/text_output"
+        android:id="@+id/recognized_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
