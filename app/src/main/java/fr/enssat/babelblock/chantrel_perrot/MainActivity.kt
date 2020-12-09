@@ -12,8 +12,12 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import fr.enssat.babelblock.chantrel_perrot.model.Language
 import fr.enssat.babelblock.chantrel_perrot.tools.*
-import fr.enssat.babelblock.chantrel_perrot.tools.ui.*
+import fr.enssat.babelblock.chantrel_perrot.ui.ToolChain
+import fr.enssat.babelblock.chantrel_perrot.ui.adapter.ToolChainAdapter
+import fr.enssat.babelblock.chantrel_perrot.ui.ToolChainMoveHelper
+import fr.enssat.babelblock.chantrel_perrot.ui.adapter.ToolListAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.speech_to_text_tool_chain.*
 import kotlinx.android.synthetic.main.text_to_speech_tool_chain.*

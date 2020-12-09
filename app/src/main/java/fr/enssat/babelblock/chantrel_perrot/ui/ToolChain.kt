@@ -1,6 +1,6 @@
-package fr.enssat.babelblock.chantrel_perrot.tools.ui
+package fr.enssat.babelblock.chantrel_perrot.ui
 
-import fr.enssat.babelblock.chantrel_perrot.tools.Language
+import fr.enssat.babelblock.chantrel_perrot.model.Language
 import java.util.*
 
 

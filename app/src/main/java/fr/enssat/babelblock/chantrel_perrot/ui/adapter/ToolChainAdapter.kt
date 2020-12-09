@@ -1,4 +1,4 @@
-package fr.enssat.babelblock.chantrel_perrot.tools.ui
+package fr.enssat.babelblock.chantrel_perrot.ui.adapter
 
 import android.graphics.Color
 import android.view.LayoutInflater
@@ -7,8 +7,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.list_item_tool_chain.view.*
 import fr.enssat.babelblock.chantrel_perrot.R
+import fr.enssat.babelblock.chantrel_perrot.ui.ItemMoveAdapter
+import fr.enssat.babelblock.chantrel_perrot.ui.ToolChain
 
-class ToolChainAdapter(private val toolChain: ToolChain) : RecyclerView.Adapter<ToolChainAdapter.ToolViewHolder>(), ItemMoveAdapter {
+class ToolChainAdapter(private val toolChain: ToolChain) : RecyclerView.Adapter<ToolChainAdapter.ToolViewHolder>(),
+    ItemMoveAdapter {
 
     init {
         //notifyDataSetChanged() = redraw, the data set has changed

@@ -1,4 +1,4 @@
-package fr.enssat.babelblock.chantrel_perrot.tools.ui
+package fr.enssat.babelblock.chantrel_perrot.ui
 
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView

@@ -1,4 +1,4 @@
-package fr.enssat.babelblock.chantrel_perrot.tools
+package fr.enssat.babelblock.chantrel_perrot.model
 
 import java.util.*
 

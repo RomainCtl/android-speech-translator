@@ -1,4 +1,4 @@
-package fr.enssat.babelblock.chantrel_perrot.tools.ui
+package fr.enssat.babelblock.chantrel_perrot.ui.adapter
 
 import android.os.Handler
 import android.os.Looper
@@ -9,8 +9,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.google.mlkit.nl.translate.TranslateLanguage
 import fr.enssat.babelblock.chantrel_perrot.R
-import fr.enssat.babelblock.chantrel_perrot.tools.Language
+import fr.enssat.babelblock.chantrel_perrot.model.Language
 import fr.enssat.babelblock.chantrel_perrot.tools.TranslationTool
+import fr.enssat.babelblock.chantrel_perrot.ui.Tool
+import fr.enssat.babelblock.chantrel_perrot.ui.ToolChain
+import fr.enssat.babelblock.chantrel_perrot.ui.ToolDisplay
 import kotlinx.android.synthetic.main.list_item_tool.view.*
 import java.util.*
 

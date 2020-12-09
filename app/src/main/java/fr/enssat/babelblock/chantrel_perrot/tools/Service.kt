@@ -1,9 +1,9 @@
 package fr.enssat.babelblock.chantrel_perrot.tools
 
 import android.content.Context
-import fr.enssat.babelblock.chantrel_perrot.tools.impl.SpeechRecognizerHandler
-import fr.enssat.babelblock.chantrel_perrot.tools.impl.TextToSpeechHandler
-import fr.enssat.babelblock.chantrel_perrot.tools.impl.TranslatorHandler
+import fr.enssat.babelblock.chantrel_perrot.tools.handler.SpeechRecognizerHandler
+import fr.enssat.babelblock.chantrel_perrot.tools.handler.TextToSpeechHandler
+import fr.enssat.babelblock.chantrel_perrot.tools.handler.TranslatorHandler
 import java.util.Locale
 
 interface TextToSpeechTool {
