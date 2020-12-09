@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="150dp"
     android:layout_height="match_parent"
     android:layout_margin="30dp">
@@ -10,32 +9,31 @@
     <Spinner
         android:id="@+id/selected_language"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:gravity="center"
-        android:layout_margin="30dp"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/text_box"
-        tools:listitem="@layout/support_simple_spinner_dropdown_item"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:listitem="@layout/support_simple_spinner_dropdown_item" />
 
     <LinearLayout
         android:id="@+id/text_box"
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:background="#EEE"
-        android:orientation="vertical"
         android:gravity="center"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/selected_language">
+
         <TextView
-            android:text="@string/push_to_talk"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#EEE"
             android:layout_marginBottom="20dp"
-            android:gravity="center"/>
+            android:background="#EEE"
+            android:gravity="center"
+            android:text="@string/push_to_talk" />
 
         <ImageButton
             android:id="@+id/push_to_talk"
@@ -49,11 +47,11 @@
         android:id="@+id/recognized_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:layout_margin="30dp"
-        app:layout_constraintStart_toStartOf="parent"
+        android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_box"
-        tools:text="output text"/>
+        tools:text="output text" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

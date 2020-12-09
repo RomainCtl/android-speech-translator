@@ -30,16 +30,25 @@ class MainActivityViewModel : ViewModel() {
     }
 
     private var onChangeListener: (() -> Unit)? = null
+    private var onItemRemovedListener: ((position: Int) -> Unit)? = null
 
     //callback to invoke void method on toolchain Changes
     //see init of ToolChainAdapter
     fun setOnChangeListener(callback: () -> Unit) {
         onChangeListener = callback
     }
+    fun setOnItemRemovedListener(callback: (position: Int) -> Unit) {
+        onItemRemovedListener = callback
+    }
 
     fun add(tool: Tool) {
         list.add(tool)
         onChangeListener?.invoke()
+    }
+
+    fun remove(position: Int) {
+        list.removeAt(position)
+        onItemRemovedListener?.invoke(position)
     }
 
     fun get(index: Int) = list[index]

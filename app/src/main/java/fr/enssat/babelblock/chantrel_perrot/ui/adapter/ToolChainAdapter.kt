@@ -16,6 +16,10 @@ class ToolChainAdapter(private val model: MainActivityViewModel) : RecyclerView.
     init {
         //notifyDataSetChanged() = redraw, the data set has changed
         model.setOnChangeListener { notifyDataSetChanged() }
+        model.setOnItemRemovedListener {
+            notifyItemRemoved(it)
+            notifyItemRangeChanged(it, model.size - it)
+        }
     }
 
     override fun getItemCount(): Int = model.size
@@ -50,6 +54,9 @@ class ToolChainAdapter(private val model: MainActivityViewModel) : RecyclerView.
             itemView.text_box.text = tool.title
             itemView.text_box.setOnClickListener {
                 model.display(i)
+            }
+            itemView.delete_btn.setOnClickListener {
+                model.remove(i)
             }
         }
     }
