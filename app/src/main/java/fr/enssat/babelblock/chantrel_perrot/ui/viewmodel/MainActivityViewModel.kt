@@ -95,10 +95,9 @@ class MainActivityViewModel(val context: Context) : ViewModel() {
             input = this.tools[position-1].text
             from = this.tools[position-1].language.toLocale()
         }
-        Timber.e("input: $input, $from")
 
         // Ensure unique work, replace if one already exist
-        val continuation = workManager.beginUniqueWork(
+        var continuation = workManager.beginUniqueWork(
             UNIQUE_WORK_NAME,
             ExistingWorkPolicy.REPLACE,
             OneTimeWorkRequestBuilder<TranslatorWorker>()
@@ -108,13 +107,12 @@ class MainActivityViewModel(val context: Context) : ViewModel() {
         )
 
         for (i in position+1 until size) {
-            Timber.e("oiodfghjdf $i $position $size")
             input = this.tools[i-1].text // will be override by the output of previous worker operation
             from = this.tools[i-1].language.toLocale()
 
-            continuation.then(
+            continuation = continuation.then(
                 OneTimeWorkRequestBuilder<TranslatorWorker>()
-                    .setInputData(tools[position].createInputDataForTranslator(input, from, i))
+                    .setInputData(this.tools[i].createInputDataForTranslator(input, from, i))
                     .addTag(TAG_TRANSLATE)
                     .build()
             )

@@ -2,7 +2,6 @@ package fr.enssat.babelblock.chantrel_perrot.tools.worker
 
 import android.content.Context
 import android.util.LruCache
-import androidx.work.ListenableWorker
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf

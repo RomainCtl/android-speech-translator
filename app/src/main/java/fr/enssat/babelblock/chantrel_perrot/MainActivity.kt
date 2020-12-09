@@ -149,7 +149,6 @@ class MainActivity : AppCompatActivity()  {
                     text = tool.text
                     from = tool.language.toLocale()
                 }
-                Timber.d("text: $text, from: ${from.toString()}")
                 textToSpeech.speak(text, from)
             }
             false
@@ -165,7 +164,6 @@ class MainActivity : AppCompatActivity()  {
             var inProgress = false
 
             for (workInfo in listOfWorkInfo) {
-                Timber.e("================= ${workInfo.id} ${workInfo.state}")
                 if (workInfo.state == WorkInfo.State.SUCCEEDED) {
                     val output = workInfo.outputData.getString(MainActivityViewModel.OUTPUT_KEY)!!
                     val position = workInfo.outputData.getInt(MainActivityViewModel.POSITION_KEY, 0) -1
