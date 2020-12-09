@@ -72,7 +72,7 @@ class SpeechRecognizerHandler(context: Context, private var locale: Locale): Spe
 
     override fun setLocale(locale: Locale) {
         this.locale = locale
-        this.intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.FRENCH)
+        this.intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, locale.toString())
     }
 
     private fun Bundle.getResult(): String? =

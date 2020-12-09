@@ -13,6 +13,7 @@ class MainActivityViewModel : ViewModel() {
         .map {
             Language(it)
         }
+
     var speakingLanguage: Locale = Locale.getDefault()
 
     private val list: MutableList<Tool> = mutableListOf()

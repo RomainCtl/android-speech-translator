@@ -42,7 +42,7 @@ class BlockService {
         fun translator(): TranslationTool =
             TranslatorHandler(context.applicationContext)
 
-        fun speechToText(from: Locale = Locale.getDefault()): SpeechToTextTool =
+        fun speechToText(from: Locale): SpeechToTextTool =
             SpeechRecognizerHandler(context.applicationContext, from)
     }
 }

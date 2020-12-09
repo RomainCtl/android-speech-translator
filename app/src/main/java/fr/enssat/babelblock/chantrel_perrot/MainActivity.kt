@@ -32,9 +32,6 @@ class MainActivity : AppCompatActivity() {
     lateinit var speechToText: SpeechToTextTool
     lateinit var translator: TranslationTool
     lateinit var textToSpeech: TextToSpeechTool
-//    lateinit var toolChain: ToolChain
-
-//    var speakingLanguage: Locale = Locale.getDefault()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,7 +47,7 @@ class MainActivity : AppCompatActivity() {
             checkPermission()
         }
 
-        speechToText = BlockService.speechToText()
+        speechToText = BlockService.speechToText(viewModel.speakingLanguage)
         translator = BlockService.translator()
         textToSpeech = BlockService.textToSpeech()
 
@@ -65,7 +62,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String?>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == recordAudioRequestCode && grantResults.size > 0) {
+        if (requestCode == recordAudioRequestCode && grantResults.isNotEmpty()) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
                 Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show()
         }
@@ -77,7 +74,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun initToolChain() {
         //create toolchain and its adapter
-//        toolChain = ToolChain()
         val adapter = ToolChainAdapter(viewModel)
 
         //dedicated drag and drop mover helper
@@ -91,8 +87,13 @@ class MainActivity : AppCompatActivity() {
         //see tool_list in activity_tool_chain.xml
         tool_list.adapter = ToolListAdapter(viewModel, translator)
 
-        // Input language (and select the default) TODO refacto this (use of adapter ?)
-        selected_language.adapter = ArrayAdapter<Language>(this, android.R.layout.simple_spinner_dropdown_item, viewModel.availableLanguages)
+        // Input language (and select the default)
+        selected_language.adapter = ArrayAdapter<Language>(
+            this,
+            android.R.layout.simple_spinner_dropdown_item,
+            viewModel.availableLanguages
+        )
+        // set default
         selected_language.setSelection(viewModel.availableLanguages.indexOf(Language(viewModel.speakingLanguage.isO3Language.take(2))))
         selected_language.onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
