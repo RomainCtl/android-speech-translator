@@ -1,13 +1,27 @@
 package fr.enssat.babelblock.chantrel_perrot.ui.viewmodel
 
-import android.util.Log
+import android.content.Context
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import androidx.work.*
 import com.google.mlkit.nl.translate.TranslateLanguage
 import fr.enssat.babelblock.chantrel_perrot.model.Language
 import fr.enssat.babelblock.chantrel_perrot.model.Tool
+import fr.enssat.babelblock.chantrel_perrot.tools.worker.TranslatorWorker
+import timber.log.Timber
 import java.util.*
 
-class MainActivityViewModel : ViewModel() {
+class MainActivityViewModel(val context: Context) : ViewModel() {
+
+    companion object {
+        private const val UNIQUE_WORK_NAME = "translationChain"
+        private const val TAG_TRANSLATE = "translation_tag"
+        const val INPUT_KEY = "input"
+        const val TO_KEY = "to"
+        const val FROM_KEY = "from"
+        const val OUTPUT_KEY = "output"
+        const val POSITION_KEY = "position"
+    }
 
     var availableLanguages: List<Language> = TranslateLanguage.getAllLanguages()
         .map {
@@ -17,16 +31,21 @@ class MainActivityViewModel : ViewModel() {
     var speakingLanguage: Locale = Locale.getDefault()
     var spokenText: String = ""
 
-    private val list: MutableList<Tool> = mutableListOf()
-    val size get() = list.size
+    private val tools: MutableList<Tool> = mutableListOf()
+    val size get() = tools.size
+
+    private val workManager = WorkManager.getInstance(context)
+    internal val outputWorkInfos: LiveData<List<WorkInfo>>
 
     init {
-        Log.i(this.javaClass.simpleName, "created!")
+        Timber.i("created!")
+        workManager.pruneWork()
+        outputWorkInfos = workManager.getWorkInfosByTagLiveData(TAG_TRANSLATE)
     }
 
     override fun onCleared() {
         super.onCleared()
-        Log.i(this.javaClass.simpleName, "destroyed!")
+        Timber.i("destroyed!")
     }
 
     private var onChangeListener: (() -> Unit)? = null
@@ -41,48 +60,73 @@ class MainActivityViewModel : ViewModel() {
         onItemRemovedListener = callback
     }
 
+    fun setText(text: String, position: Int) {
+        tools[position].text = text
+        onChangeListener?.invoke()
+    }
+
     fun add(tool: Tool) {
-        list.add(tool)
+        cancelWork()
+        tools.add(tool)
         onChangeListener?.invoke()
     }
 
     fun remove(position: Int) {
-        list.removeAt(position)
+        cancelWork()
+        tools.removeAt(position)
         onItemRemovedListener?.invoke(position)
     }
 
-    fun get(index: Int) = list[index]
+    fun get(index: Int) = tools[index]
 
     //remove and insert
     fun move(from: Int, to: Int) {
-        val dragged = list.removeAt(from)
-        list.add(to, dragged)
+        cancelWork()
+        val dragged = tools.removeAt(from)
+        tools.add(to, dragged)
     }
 
-    //display each input/output of this chain
-    //starting at the given position
-    //with an initial empty input
-    fun display(position: Int) {
-        //recursive loop
-        fun loop(value: String, from: Locale, chain: List<Tool>) {
-            //if not null do the let statement
-            //test end of recursion
-            chain.firstOrNull()?.let {
-                onChangeListener?.invoke()
-
-                it.run(value, from) { output ->
-                    it.text = output
-                    onChangeListener?.invoke()
-
-                    //loop on the remaining chain
-                    loop(output, it.language.toLocale(), chain.drop(1))
-                }
-            }
-        }
-        //start recursion
+    fun applyTranslation(position: Int) {
+        // from speech Recognizer
         var input: String = spokenText
-        if (position != 0)
-            input = list[position].text
-        loop(input, this.speakingLanguage, list.drop(position))
+        var from: Locale = speakingLanguage
+        // Or from previous translator block
+        if (position != 0) {
+            input = this.tools[position-1].text
+            from = this.tools[position-1].language.toLocale()
+        }
+        Timber.e("input: $input, $from")
+
+        // Ensure unique work, replace if one already exist
+        val continuation = workManager.beginUniqueWork(
+            UNIQUE_WORK_NAME,
+            ExistingWorkPolicy.REPLACE,
+            OneTimeWorkRequestBuilder<TranslatorWorker>()
+                .setInputData(this.tools[position].createInputDataForTranslator(input, from, position))
+                .addTag(TAG_TRANSLATE)
+                .build()
+        )
+
+        for (i in position+1 until size) {
+            Timber.e("oiodfghjdf $i $position $size")
+            input = this.tools[i-1].text // will be override by the output of previous worker operation
+            from = this.tools[i-1].language.toLocale()
+
+            continuation.then(
+                OneTimeWorkRequestBuilder<TranslatorWorker>()
+                    .setInputData(tools[position].createInputDataForTranslator(input, from, i))
+                    .addTag(TAG_TRANSLATE)
+                    .build()
+            )
+        }
+
+        continuation.enqueue()
+    }
+
+    private fun cancelWork() {
+        if (!workManager.getWorkInfosByTag(TAG_TRANSLATE).isDone) {
+            workManager.cancelAllWorkByTag(TAG_TRANSLATE)
+            Timber.i("Translation chain canceled!")
+        }
     }
 }

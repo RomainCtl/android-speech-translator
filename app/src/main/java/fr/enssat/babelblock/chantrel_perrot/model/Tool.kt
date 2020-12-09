@@ -1,20 +1,23 @@
 package fr.enssat.babelblock.chantrel_perrot.model
 
-import android.util.Log
-import fr.enssat.babelblock.chantrel_perrot.tools.BlockService
+import androidx.work.Data
 import fr.enssat.babelblock.chantrel_perrot.ui.utils.ToolInterface
+import fr.enssat.babelblock.chantrel_perrot.ui.viewmodel.MainActivityViewModel
+import timber.log.Timber
 import java.util.*
 
 class Tool(var language: Language, var title: String, var text: String) : ToolInterface {
 
-    override fun run(input: String, from: Locale, callback: (String) -> Unit) {
-        callback("translation in progress...")
-        BlockService.translator().translate(input, from, language.toLocale()) { text ->
-            callback(text)
-        }
+    override fun close() {
+        Timber.d( "$title close")
     }
 
-    override fun close() {
-        Log.d(this.javaClass.simpleName, "$title close")
+    fun createInputDataForTranslator(input: String, from: Locale, position: Int): Data {
+        val builder = Data.Builder()
+        builder.putString(MainActivityViewModel.INPUT_KEY, input)
+        builder.putString(MainActivityViewModel.FROM_KEY, from.isO3Language)
+        builder.putString(MainActivityViewModel.TO_KEY, language.toLocale().isO3Language)
+        builder.putInt(MainActivityViewModel.POSITION_KEY, position)
+        return builder.build()
     }
 }

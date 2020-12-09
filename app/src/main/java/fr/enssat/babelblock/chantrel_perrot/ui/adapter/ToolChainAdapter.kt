@@ -53,7 +53,7 @@ class ToolChainAdapter(private val model: MainActivityViewModel) : RecyclerView.
             itemView.text_output.text = tool.text
             itemView.text_box.text = tool.title
             itemView.text_box.setOnClickListener {
-                model.display(i)
+                model.applyTranslation(i)
             }
             itemView.delete_btn.setOnClickListener {
                 model.remove(i)

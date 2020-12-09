@@ -12,35 +12,41 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.work.WorkInfo
 import fr.enssat.babelblock.chantrel_perrot.model.Language
 import fr.enssat.babelblock.chantrel_perrot.tools.*
 import fr.enssat.babelblock.chantrel_perrot.ui.adapter.ToolChainAdapter
 import fr.enssat.babelblock.chantrel_perrot.ui.ToolChainMoveHelper
 import fr.enssat.babelblock.chantrel_perrot.ui.adapter.ToolListAdapter
 import fr.enssat.babelblock.chantrel_perrot.ui.viewmodel.MainActivityViewModel
+import fr.enssat.babelblock.chantrel_perrot.ui.viewmodel.MainActivityViewModelFactory
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.speech_to_text_tool_chain.*
 import kotlinx.android.synthetic.main.text_to_speech_tool_chain.*
+import timber.log.Timber
 import java.util.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity()  {
     private val recordAudioRequestCode = 1
 
-    lateinit var viewModel: MainActivityViewModel
+    private lateinit var viewModel: MainActivityViewModel
+    private lateinit var viewModelFactory: MainActivityViewModelFactory
 
     lateinit var speechToText: SpeechToTextTool
-    lateinit var translator: TranslationTool
     lateinit var textToSpeech: TextToSpeechTool
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        Timber.plant(Timber.DebugTree())
 
         // Define service context
         BlockService.setContext(this)
 
-        viewModel = ViewModelProvider(this).get(MainActivityViewModel::class.java)
+        viewModelFactory = MainActivityViewModelFactory(this)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(MainActivityViewModel::class.java)
 
         // Check "RECORD_AUDIO" permission
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
@@ -48,11 +54,12 @@ class MainActivity : AppCompatActivity() {
         }
 
         speechToText = BlockService.speechToText(viewModel.speakingLanguage)
-        translator = BlockService.translator()
         textToSpeech = BlockService.textToSpeech()
 
         initToolChain()
         initSpeechButtons()
+
+        viewModel.outputWorkInfos.observe(this, workInfosObserver())
     }
 
     override fun onDestroy() {
@@ -107,19 +114,19 @@ class MainActivity : AppCompatActivity() {
     private fun initSpeechButtons() {
         push_to_talk.setOnTouchListener { v, event ->
             if (event.action == MotionEvent.ACTION_DOWN) {
-                Log.d(this.javaClass.simpleName, "Push to talk btn pressed")
+                Timber.d("Push to talk btn pressed")
                 v.performClick()
                 speechToText.start(object : SpeechToTextTool.Listener {
                     override fun onResult(text: String, isFinal: Boolean) {
                         if (isFinal) {
                             recognized_text.text = text
                             viewModel.spokenText = text
-                            viewModel.display(0)
+                            viewModel.applyTranslation(0)
                         }
                     }
                 })
             } else if (event.action == MotionEvent.ACTION_UP) {
-                Log.d(this.javaClass.simpleName, "Push to talk btn releases")
+                Timber.d("Push to talk btn releases")
                 speechToText.stop()
             }
             false
@@ -127,7 +134,7 @@ class MainActivity : AppCompatActivity() {
 
         listen_to.setOnTouchListener { v, event ->
             if (event.action == MotionEvent.ACTION_DOWN) {
-                Log.d(this.javaClass.simpleName, "Listen btn pressed")
+                Timber.d("Listen btn pressed")
                 v.performClick()
                 val text: String
                 val from: Locale
@@ -142,9 +149,38 @@ class MainActivity : AppCompatActivity() {
                     text = tool.text
                     from = tool.language.toLocale()
                 }
+                Timber.d("text: $text, from: ${from.toString()}")
                 textToSpeech.speak(text, from)
             }
             false
+        }
+    }
+
+    private fun workInfosObserver(): Observer<List<WorkInfo>> {
+        return Observer { listOfWorkInfo ->
+            if (listOfWorkInfo.isNullOrEmpty()) {
+                return@Observer
+            }
+
+            var inProgress = false
+
+            for (workInfo in listOfWorkInfo) {
+                Timber.e("================= ${workInfo.id} ${workInfo.state}")
+                if (workInfo.state == WorkInfo.State.SUCCEEDED) {
+                    val output = workInfo.outputData.getString(MainActivityViewModel.OUTPUT_KEY)!!
+                    val position = workInfo.outputData.getInt(MainActivityViewModel.POSITION_KEY, 0) -1
+                    Timber.e("output: $output")
+                    viewModel.setText(output, position)
+                }
+                if (!workInfo.state.isFinished)
+                    inProgress = true
+            }
+            Timber.w("====================== $inProgress")
+            if (inProgress) {
+                // Show loader
+            } else {
+                // hide loader
+            }
         }
     }
 }
