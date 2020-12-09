@@ -1,9 +1,9 @@
 package fr.enssat.babelblock.chantrel_perrot.tools
 
 import android.content.Context
-import fr.enssat.babelblock.chantrel_perrot.tools.impl.SpeechRecognizerHandler
-import fr.enssat.babelblock.chantrel_perrot.tools.impl.TextToSpeechHandler
-import fr.enssat.babelblock.chantrel_perrot.tools.impl.TranslatorHandler
+import fr.enssat.babelblock.chantrel_perrot.tools.handler.SpeechRecognizerHandler
+import fr.enssat.babelblock.chantrel_perrot.tools.handler.TextToSpeechHandler
+import fr.enssat.babelblock.chantrel_perrot.tools.handler.TranslatorHandler
 import java.util.Locale
 
 interface TextToSpeechTool {
@@ -27,14 +27,22 @@ interface SpeechToTextTool {
     fun setLocale(locale: Locale)
 }
 
-class BlockService(val context: Context) {
-    fun textToSpeech():TextToSpeechTool {
-        return TextToSpeechHandler(context.applicationContext)
+class BlockService {
+    companion object {
+        private lateinit var context: Context
+
+        fun setContext(context: Context) {
+            this.context = context
+        }
+
+        fun textToSpeech(): TextToSpeechTool {
+            return TextToSpeechHandler(context.applicationContext)
+        }
+
+        fun translator(): TranslationTool =
+            TranslatorHandler(context.applicationContext)
+
+        fun speechToText(from: Locale): SpeechToTextTool =
+            SpeechRecognizerHandler(context.applicationContext, from)
     }
-
-    fun translator(): TranslationTool =
-        TranslatorHandler(context.applicationContext)
-
-    fun speechToText(from: Locale = Locale.getDefault()): SpeechToTextTool =
-        SpeechRecognizerHandler(context.applicationContext, from)
 }

@@ -12,4 +12,5 @@
     <string name="listen_to">Listen to</string>
     <string name="speaker_logo">Speaker logo</string>
     <string name="micro_logo">micro logo</string>
+    <string name="delete_tool">Delete tool</string>
 </resources>

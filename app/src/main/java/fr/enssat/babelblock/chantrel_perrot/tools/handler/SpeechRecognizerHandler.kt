@@ -1,4 +1,4 @@
-package fr.enssat.babelblock.chantrel_perrot.tools.impl
+package fr.enssat.babelblock.chantrel_perrot.tools.handler
 
 import android.content.Context
 import android.content.Intent
@@ -72,7 +72,7 @@ class SpeechRecognizerHandler(context: Context, private var locale: Locale): Spe
 
     override fun setLocale(locale: Locale) {
         this.locale = locale
-        this.intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.FRENCH)
+        this.intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, locale.toString())
     }
 
     private fun Bundle.getResult(): String? =
