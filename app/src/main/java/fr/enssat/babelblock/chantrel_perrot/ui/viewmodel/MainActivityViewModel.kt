@@ -83,6 +83,6 @@ class MainActivityViewModel : ViewModel() {
         var input: String = spokenText
         if (position != 0)
             input = list[position].text
-        loop(input, Locale.getDefault(), list.drop(position))
+        loop(input, this.speakingLanguage, list.drop(position))
     }
 }
