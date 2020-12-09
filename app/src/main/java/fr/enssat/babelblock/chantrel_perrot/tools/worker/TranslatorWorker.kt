@@ -46,6 +46,8 @@ class TranslatorWorker(context: Context, params: WorkerParameters): Worker(conte
 
         var result: Result
 
+        sleep(300)
+
         try {
             if (input.isEmpty()) {
                 Timber.e("Error applying translation")
