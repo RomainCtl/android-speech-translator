@@ -85,7 +85,7 @@ class MainActivity : AppCompatActivity() {
         tool_chain_list.adapter = adapter
 
         //see tool_list in activity_tool_chain.xml
-        tool_list.adapter = ToolListAdapter(viewModel, translator)
+        tool_list.adapter = ToolListAdapter(viewModel)
 
         // Input language (and select the default)
         selected_language.adapter = ArrayAdapter<Language>(
@@ -113,7 +113,8 @@ class MainActivity : AppCompatActivity() {
                     override fun onResult(text: String, isFinal: Boolean) {
                         if (isFinal) {
                             recognized_text.text = text
-                            viewModel.display(0, text)
+                            viewModel.spokenText = text
+                            viewModel.display(0)
                         }
                     }
                 })

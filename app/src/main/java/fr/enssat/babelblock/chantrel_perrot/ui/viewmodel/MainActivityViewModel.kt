@@ -15,6 +15,7 @@ class MainActivityViewModel : ViewModel() {
         }
 
     var speakingLanguage: Locale = Locale.getDefault()
+    var spokenText: String = ""
 
     private val list: MutableList<Tool> = mutableListOf()
     val size get() = list.size
@@ -52,7 +53,7 @@ class MainActivityViewModel : ViewModel() {
     //display each input/output of this chain
     //starting at the given position
     //with an initial empty input
-    fun display(position: Int, input: String = "") {
+    fun display(position: Int) {
         //recursive loop
         fun loop(value: String, from: Locale, chain: List<Tool>) {
             //if not null do the let statement
@@ -70,9 +71,9 @@ class MainActivityViewModel : ViewModel() {
             }
         }
         //start recursion
-        var _input: String = input
+        var input: String = spokenText
         if (position != 0)
-            _input = list[position].text
-        loop(_input, Locale.getDefault(), list.drop(position))
+            input = list[position].text
+        loop(input, Locale.getDefault(), list.drop(position))
     }
 }
