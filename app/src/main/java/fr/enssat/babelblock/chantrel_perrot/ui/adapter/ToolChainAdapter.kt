@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isGone
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.list_item_tool_chain.view.*
 import fr.enssat.babelblock.chantrel_perrot.R
@@ -50,6 +51,7 @@ class ToolChainAdapter(private val model: MainActivityViewModel) : RecyclerView.
     class ToolViewHolder(view: View): RecyclerView.ViewHolder(view) {
         fun bind(model: MainActivityViewModel, i: Int) {
             val tool = model.get(i)
+            itemView.progress_bar.isGone = !tool.inProgress
             itemView.text_output.text = tool.text
             itemView.text_box.text = tool.title
             itemView.text_box.setOnClickListener {

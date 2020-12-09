@@ -61,8 +61,14 @@ class MainActivityViewModel(val context: Context) : ViewModel() {
     }
 
     fun setText(text: String, position: Int) {
+        tools[position].inProgress = false
         tools[position].text = text
         onChangeListener?.invoke()
+    }
+
+    private fun setInProgress(inProgress: Boolean, startPosition: Int = 0) {
+        for (i in startPosition until size)
+            tools[i].inProgress = inProgress
     }
 
     fun add(tool: Tool) {
@@ -96,6 +102,8 @@ class MainActivityViewModel(val context: Context) : ViewModel() {
             from = this.tools[position-1].language.toLocale()
         }
 
+        setInProgress(true, position)
+
         // Ensure unique work, replace if one already exist
         var continuation = workManager.beginUniqueWork(
             UNIQUE_WORK_NAME,
@@ -117,13 +125,13 @@ class MainActivityViewModel(val context: Context) : ViewModel() {
                     .build()
             )
         }
-
         continuation.enqueue()
     }
 
     private fun cancelWork() {
         if (!workManager.getWorkInfosByTag(TAG_TRANSLATE).isDone) {
             workManager.cancelAllWorkByTag(TAG_TRANSLATE)
+            setInProgress(false)
             Timber.i("Translation chain canceled!")
         }
     }

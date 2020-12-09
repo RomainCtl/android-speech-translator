@@ -8,6 +8,8 @@ import java.util.*
 
 class Tool(var language: Language, var title: String, var text: String) : ToolInterface {
 
+    var inProgress: Boolean = false
+
     override fun close() {
         Timber.d( "$title close")
     }

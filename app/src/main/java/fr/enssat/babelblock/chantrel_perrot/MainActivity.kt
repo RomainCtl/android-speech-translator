@@ -161,23 +161,12 @@ class MainActivity : AppCompatActivity()  {
                 return@Observer
             }
 
-            var inProgress = false
-
             for (workInfo in listOfWorkInfo) {
                 if (workInfo.state == WorkInfo.State.SUCCEEDED) {
                     val output = workInfo.outputData.getString(MainActivityViewModel.OUTPUT_KEY)!!
                     val position = workInfo.outputData.getInt(MainActivityViewModel.POSITION_KEY, 0) -1
-                    Timber.e("output: $output")
                     viewModel.setText(output, position)
                 }
-                if (!workInfo.state.isFinished)
-                    inProgress = true
-            }
-            Timber.w("====================== $inProgress")
-            if (inProgress) {
-                // Show loader
-            } else {
-                // hide loader
             }
         }
     }
