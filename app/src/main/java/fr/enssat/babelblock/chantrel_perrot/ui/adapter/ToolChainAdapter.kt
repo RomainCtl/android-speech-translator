@@ -8,17 +8,17 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.list_item_tool_chain.view.*
 import fr.enssat.babelblock.chantrel_perrot.R
 import fr.enssat.babelblock.chantrel_perrot.ui.ItemMoveAdapter
-import fr.enssat.babelblock.chantrel_perrot.ui.ToolChain
+import fr.enssat.babelblock.chantrel_perrot.ui.viewmodel.MainActivityViewModel
 
-class ToolChainAdapter(private val toolChain: ToolChain) : RecyclerView.Adapter<ToolChainAdapter.ToolViewHolder>(),
+class ToolChainAdapter(private val model: MainActivityViewModel) : RecyclerView.Adapter<ToolChainAdapter.ToolViewHolder>(),
     ItemMoveAdapter {
 
     init {
         //notifyDataSetChanged() = redraw, the data set has changed
-        toolChain.setOnChangeListener { notifyDataSetChanged() }
+        model.setOnChangeListener { notifyDataSetChanged() }
     }
 
-    override fun getItemCount(): Int = toolChain.size
+    override fun getItemCount(): Int = model.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ToolViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.list_item_tool_chain, parent, false)
@@ -26,11 +26,11 @@ class ToolChainAdapter(private val toolChain: ToolChain) : RecyclerView.Adapter<
     }
 
     override fun onBindViewHolder(holder: ToolViewHolder, position: Int) {
-        holder.bind(toolChain, position)
+        holder.bind(model, position)
     }
 
     override fun onRowMoved(from: Int, to: Int) {
-        toolChain.move(from, to)
+        model.move(from, to)
         notifyItemMoved(from, to)
     }
 
@@ -44,12 +44,12 @@ class ToolChainAdapter(private val toolChain: ToolChain) : RecyclerView.Adapter<
 
     //viewholder, kind of reusable view cache,  for each tool in the chain
     class ToolViewHolder(view: View): RecyclerView.ViewHolder(view) {
-        fun bind(toolChain: ToolChain, i: Int) {
-            val tool = toolChain.get(i)
-            itemView.text_output.text = tool.output
+        fun bind(model: MainActivityViewModel, i: Int) {
+            val tool = model.get(i)
+            itemView.text_output.text = tool.text
             itemView.text_box.text = tool.title
             itemView.text_box.setOnClickListener {
-                toolChain.display(i)
+                model.display(i)
             }
         }
     }

@@ -6,7 +6,7 @@ import java.util.*
  * Holds the language code (i.e. "en") and the corresponding localized full language name
  * (i.e. "English")
  */
-class Language(val code: String) : Comparable<Language> {
+class Language(private val code: String) : Comparable<Language> {
 
     private val displayName: String
         get() = Locale(code).displayName

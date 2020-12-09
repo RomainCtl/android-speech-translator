@@ -1,26 +1,31 @@
-package fr.enssat.babelblock.chantrel_perrot.ui
+package fr.enssat.babelblock.chantrel_perrot.ui.viewmodel
 
+import android.util.Log
+import androidx.lifecycle.ViewModel
+import com.google.mlkit.nl.translate.TranslateLanguage
 import fr.enssat.babelblock.chantrel_perrot.model.Language
+import fr.enssat.babelblock.chantrel_perrot.model.Tool
 import java.util.*
 
+class MainActivityViewModel : ViewModel() {
 
-interface Tool {
-    fun run(input: String, from: Locale, callback: (String) -> Unit)
-    fun close()
-}
+    var availableLanguages: List<Language> = TranslateLanguage.getAllLanguages()
+        .map {
+            Language(it)
+        }
+    var speakingLanguage: Locale = Locale.getDefault()
 
-interface ToolDisplay {
-    var language: Language
-    val tool: Tool
-    val title: String
-    var output: String
-}
+    private val list: MutableList<Tool> = mutableListOf()
+    val size get() = list.size
 
-class ToolChain(list: List<ToolDisplay> = emptyList()) {
+    init {
+        Log.i(this.javaClass.simpleName, "created!")
+    }
 
-    private val list: MutableList<ToolDisplay> = list.toMutableList()
-    val size
-        get() = list.size
+    override fun onCleared() {
+        super.onCleared()
+        Log.i(this.javaClass.simpleName, "destroyed!")
+    }
 
     private var onChangeListener: (() -> Unit)? = null
 
@@ -30,12 +35,12 @@ class ToolChain(list: List<ToolDisplay> = emptyList()) {
         onChangeListener = callback
     }
 
-    fun add(tool: ToolDisplay) {
+    fun add(tool: Tool) {
         list.add(tool)
         onChangeListener?.invoke()
     }
 
-    fun get(index: Int) = list.get(index)
+    fun get(index: Int) = list[index]
 
     //remove and insert
     fun move(from: Int, to: Int) {
@@ -48,14 +53,14 @@ class ToolChain(list: List<ToolDisplay> = emptyList()) {
     //with an initial empty input
     fun display(position: Int, input: String = "") {
         //recursive loop
-        fun loop(value: String, from: Locale, chain: List<ToolDisplay>) {
+        fun loop(value: String, from: Locale, chain: List<Tool>) {
             //if not null do the let statement
             //test end of recursion
             chain.firstOrNull()?.let {
                 onChangeListener?.invoke()
 
-                it.tool.run(value, from) { output ->
-                    it.output = output
+                it.run(value, from) { output ->
+                    it.text = output
                     onChangeListener?.invoke()
 
                     //loop on the remaining chain
@@ -66,7 +71,7 @@ class ToolChain(list: List<ToolDisplay> = emptyList()) {
         //start recursion
         var _input: String = input
         if (position != 0)
-            _input = list.get(position).output
+            _input = list[position].text
         loop(_input, Locale.getDefault(), list.drop(position))
     }
 }

@@ -27,14 +27,22 @@ interface SpeechToTextTool {
     fun setLocale(locale: Locale)
 }
 
-class BlockService(val context: Context) {
-    fun textToSpeech():TextToSpeechTool {
-        return TextToSpeechHandler(context.applicationContext)
+class BlockService {
+    companion object {
+        private lateinit var context: Context
+
+        fun setContext(context: Context) {
+            this.context = context
+        }
+
+        fun textToSpeech(): TextToSpeechTool {
+            return TextToSpeechHandler(context.applicationContext)
+        }
+
+        fun translator(): TranslationTool =
+            TranslatorHandler(context.applicationContext)
+
+        fun speechToText(from: Locale = Locale.getDefault()): SpeechToTextTool =
+            SpeechRecognizerHandler(context.applicationContext, from)
     }
-
-    fun translator(): TranslationTool =
-        TranslatorHandler(context.applicationContext)
-
-    fun speechToText(from: Locale = Locale.getDefault()): SpeechToTextTool =
-        SpeechRecognizerHandler(context.applicationContext, from)
 }
